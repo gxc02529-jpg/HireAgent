@@ -169,7 +169,11 @@ class RecruitingTools:
         return slots
 
     def schedule_interview(self, request: ScheduleRequest) -> Interview:
-        normalized = request.model_copy(update={"starts_at": request.starts_at.astimezone(timezone.utc)})
+        try:
+            normalized = request.model_copy(update={"starts_at": request.starts_at.astimezone(timezone.utc)})
+            end = normalized.starts_at + timedelta(minutes=request.duration_minutes)
+        except OverflowError as error:
+            raise DomainError("time_out_of_range", "Interview interval exceeds the supported date range", 422) from error
         payload = normalized.model_dump(mode="json", exclude={"idempotency_key"})
         fingerprint = sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
         previous = self.store.idempotency.get(request.idempotency_key)
@@ -182,7 +186,6 @@ class RecruitingTools:
         start = normalized.starts_at
         if start <= self.clock():
             raise DomainError("past_interview", "Interview start must be in the future", 422)
-        end = start + timedelta(minutes=request.duration_minutes)
         if self._conflicts(start, end, interviewer_id=request.interviewer_id,
                            candidate_id=request.candidate_id):
             raise DomainError("interview_conflict", "Candidate or interviewer already has an overlapping interview")

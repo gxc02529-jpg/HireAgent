@@ -129,6 +129,15 @@ def test_concurrent_same_key_has_single_effect(tools, booking):
     assert len(tools.store.interviews) == 1
 
 
+@pytest.mark.parametrize("starts_at", ["9999-12-31T23:30:00Z", "9999-12-31T23:30:00-02:00"])
+def test_overflowing_time_ranges_are_domain_errors(tools, booking, starts_at):
+    with pytest.raises(DomainError) as caught:
+        tools.invoke("schedule_interview", {**booking, "starts_at": starts_at})
+    assert caught.value.code == "time_out_of_range"
+    assert caught.value.status == 422
+    assert len(tools.store.interviews) == 0
+
+
 def test_concurrent_distinct_keys_cannot_double_book(tools, booking):
     def schedule(number):
         try:
