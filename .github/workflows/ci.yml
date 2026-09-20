@@ -16,4 +16,5 @@ jobs:
       - run: python -m pip install -e ".[dev]"
       - run: python -m pytest
       - run: python examples/evaluate.py
+      - run: python -m hire_agent.mcp_server --help
       - run: python -m compileall -q src

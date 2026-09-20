@@ -74,3 +74,9 @@ def create_app(store: MemoryStore | None = None) -> FastAPI:
 
 
 app = create_app()
+
+
+def run() -> None:
+    import uvicorn
+
+    uvicorn.run("hire_agent.api:app", host="127.0.0.1", port=8000, workers=1)

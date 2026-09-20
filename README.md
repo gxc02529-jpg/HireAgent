@@ -1,8 +1,8 @@
 # HireAgent
 
-企业智能化解决方案团队基于统一 Agent 交付底座，为招聘协作场景完成的脱敏参考实现。项目将候选人档案、岗位匹配、面试排期封装成 **13 个可调用工具**，由 **3 个职责受限的本地 Agent** 处理 **9 类结构化意图**，通过 FastAPI 提供 JSON API 和 SSE 过程事件。
+企业智能化解决方案团队基于统一 Agent 交付底座，为招聘协作场景完成的脱敏参考实现。项目将候选人档案、岗位匹配、面试排期封装成 **13 个可调用工具**，由 **3 个职责受限的本地 Agent** 处理 **9 类结构化意图**，同时通过 FastMCP 与 FastAPI 提供 MCP、JSON API 和 SSE 接口。
 
-当前公开版本使用规则路由、可解释评分和内存存储，可以离线运行；未接入客户招聘系统、LLM、MCP 网络传输或 A2A 网络协议。示例数据均为合成数据。平台复用和行业适配边界见 [REUSE_MAP.md](docs/REUSE_MAP.md)。
+当前公开版本使用规则路由、可解释评分和内存存储，可以离线运行；已实现 FastMCP STDIO 与 Streamable HTTP 传输，尚未接入客户招聘系统、LLM 或 A2A 网络协议。示例数据均为合成数据。平台复用和行业适配边界见 [REUSE_MAP.md](docs/REUSE_MAP.md)。
 
 ## 快速运行
 
@@ -37,6 +37,41 @@ Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8000/workflows" -ContentTy
 python examples/demo.py
 python examples/evaluate.py
 python -m pytest
+```
+
+## MCP Server
+
+默认使用 STDIO，适合由桌面 Agent 客户端按需启动：
+
+```powershell
+python -m hire_agent.mcp_server
+```
+
+客户端配置示例：
+
+```json
+{
+  "mcpServers": {
+    "hireagent": {
+      "command": "python",
+      "args": ["-m", "hire_agent.mcp_server"]
+    }
+  }
+}
+```
+
+启动 Streamable HTTP 服务：
+
+```powershell
+python -m hire_agent.mcp_server --transport http --host 127.0.0.1 --port 8001
+```
+
+MCP Endpoint 为 `http://127.0.0.1:8001/mcp`。13 个 MCP Tool 与 HTTP API 复用同一套 Pydantic 参数模型、领域校验、锁和幂等状态，不维护第二套业务逻辑。
+
+独立拉起服务并执行一次真实 HTTP 协议往返：
+
+```powershell
+python examples/mcp_http_smoke.py
 ```
 
 ## 9 类意图与 13 个工具
@@ -94,13 +129,14 @@ src/hire_agent/
   store.py      内存仓库及合成示例
   tools.py      工具注册、评分、排期与并发保护
   agents.py     意图路由、职责限制与工作流事件
+  mcp_server.py FastMCP STDIO 与 Streamable HTTP 协议适配
   api.py        FastAPI / SSE
 tests/          工具、并发、幂等、工作流与 HTTP 回归测试
 examples/       无外部服务的运行示例
 docs/           复用边界说明
 ```
 
-测试覆盖 13 个工具的实际调用、评分明细、候选人与面试官冲突、跨时区幂等、并发预约、取消重试、Agent 工具权限、API 校验和 SSE 成功/失败终止事件。
+测试覆盖 13 个工具的实际调用、评分明细、候选人与面试官冲突、跨时区幂等、并发预约、取消重试、Agent 工具权限、API 校验、SSE 终止事件，以及 MCP Tool Discovery、Schema、调用和幂等行为。
 
 ## Agent 评测口径
 
@@ -113,6 +149,6 @@ docs/           复用边界说明
 
 ## 当前边界
 
-仅供本机、单进程演示，默认无认证、权限隔离或持久化，请按快速运行命令绑定 `127.0.0.1`，并使用一个 worker。多 worker 或多实例之间不共享排期及幂等状态。不提供邮件发送、外部日历、附件上传、真实招聘数据接入或线上性能指标。
+仅供本机、单进程演示，默认无认证、权限隔离或持久化，请将 HTTP 服务绑定到 `127.0.0.1`，并使用一个 worker。多 worker 或多实例之间不共享排期及幂等状态。不提供邮件发送、外部日历、附件上传、真实招聘数据接入或线上性能指标。
 
-`.env.example` 只是配置示例，程序不自动读取 `.env`。若要关闭合成数据，在启动前设置 PowerShell 环境变量 `$env:HIREAGENT_DEMO_DATA = "false"`。后续接入数据库时，需要用数据库事务与约束代替当前进程锁；接入 MCP/A2A/LLM 时可以复用现有工具 Schema、权限边界和工作流模型，但相关网络适配尚未实现。
+`.env.example` 只是配置示例，程序不自动读取 `.env`。若要关闭 HTTP API 的合成数据，在启动前设置 PowerShell 环境变量 `$env:HIREAGENT_DEMO_DATA = "false"`。后续接入数据库时，需要用数据库事务与唯一约束代替当前进程锁；A2A、LLM、认证和持久化适配尚未实现。
