@@ -4,7 +4,6 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)
 
-
 企业智能化解决方案团队基于统一 Agent 交付底座，为招聘协作场景完成的脱敏参考实现。项目将候选人档案、岗位匹配、面试排期封装成 **13 个可调用工具**，由 **3 个职责受限的本地 Agent** 处理 **9 类结构化意图**，同时通过 FastMCP 与 FastAPI 提供 MCP、JSON API 和 SSE 接口。
 
 当前公开版本使用规则路由、可解释评分和内存存储，可以离线运行；已实现 FastMCP STDIO 与 Streamable HTTP 传输，尚未接入客户招聘系统、LLM 或 A2A 网络协议。示例数据均为合成数据。平台复用和行业适配边界见 [REUSE_MAP.md](docs/REUSE_MAP.md)。
