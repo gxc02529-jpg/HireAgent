@@ -94,7 +94,7 @@ python examples/mcp_http_smoke.py
 
 另外四个工具为 `get_candidate`、`get_job`、`rank_candidates`、`list_interviews`。所有工具都可以通过 `POST /tools/{tool_name}` 单独调用。匹配工作流依次读取候选人、读取岗位、计算匹配结果；其他意图直接调用相应职责 Agent。
 
-调用者明确提供 `intent` 和 `arguments`，本版本不从自由文本推断意图。`summarize_resume` 根据结构化档案生成事实模板摘要，不负责 PDF/Word 简历解析。工具参数由 Pydantic 校验，未知字段、错误类型和缺少必填字段会得到 422。
+调用者明确提供 `intent` 和 `arguments`，本版本不从自由文本推断意图。`summarize_resume` 根据结构化档案生成事实模板摘要，不负责 PDF/Word 档案解析。工具参数由 Pydantic 校验，未知字段、错误类型和缺少必填字段会得到 422。
 
 匹配评分：技能覆盖率 × 70 + 经验达标比例 × 20 + 地点兼容 × 10。工作经验得分上限为 20；远程岗位视为地点兼容；技能进行去重及大小写归一化，未实现同义词或向量语义匹配。
 
