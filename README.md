@@ -1,5 +1,10 @@
 # HireAgent
 
+![CI](https://github.com/gxc02529-jpg/HireAgent/actions/workflows/ci.yml/badge.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)
+
+
 企业智能化解决方案团队基于统一 Agent 交付底座，为招聘协作场景完成的脱敏参考实现。项目将候选人档案、岗位匹配、面试排期封装成 **13 个可调用工具**，由 **3 个职责受限的本地 Agent** 处理 **9 类结构化意图**，同时通过 FastMCP 与 FastAPI 提供 MCP、JSON API 和 SSE 接口。
 
 当前公开版本使用规则路由、可解释评分和内存存储，可以离线运行；已实现 FastMCP STDIO 与 Streamable HTTP 传输，尚未接入客户招聘系统、LLM 或 A2A 网络协议。示例数据均为合成数据。平台复用和行业适配边界见 [REUSE_MAP.md](docs/REUSE_MAP.md)。
@@ -152,3 +157,7 @@ docs/           复用边界说明
 仅供本机、单进程演示，默认无认证、权限隔离或持久化，请将 HTTP 服务绑定到 `127.0.0.1`，并使用一个 worker。多 worker 或多实例之间不共享排期及幂等状态。不提供邮件发送、外部日历、附件上传、真实招聘数据接入或线上性能指标。
 
 `.env.example` 只是配置示例，程序不自动读取 `.env`。若要关闭 HTTP API 的合成数据，在启动前设置 PowerShell 环境变量 `$env:HIREAGENT_DEMO_DATA = "false"`。后续接入数据库时，需要用数据库事务与唯一约束代替当前进程锁；A2A、LLM、认证和持久化适配尚未实现。
+
+## 许可协议
+
+本项目基于 [MIT License](LICENSE) 发布，版权归 gxc02529-jpg 所有。
