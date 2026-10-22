@@ -2,8 +2,8 @@
  "repo": "HireAgent",
  "manifest": "pyproject.toml（含 1 组 extras）",
  "manifest_path": "pyproject.toml",
- "date": "2026-10-21",
- "generated_at": "2026-10-21T06:23:25Z",
+ "date": "2026-10-22",
+ "generated_at": "2026-10-22T06:26:08Z",
  "packages_total": 7,
  "audit_ok": true,
  "findings": [],
@@ -282,6 +282,15 @@
   },
   {
    "date": "2026-10-21",
+   "packages": 7,
+   "affected": 0,
+   "high": 0,
+   "drift": 0,
+   "finding_ids": [],
+   "audit_ok": true
+  },
+  {
+   "date": "2026-10-22",
    "packages": 7,
    "affected": 0,
    "high": 0,
