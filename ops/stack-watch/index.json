@@ -2,11 +2,33 @@
  "repo": "HireAgent",
  "manifest": "pyproject.toml（含 1 组 extras）",
  "manifest_path": "pyproject.toml",
- "date": "2026-10-23",
- "generated_at": "2026-10-23T06:21:21Z",
+ "date": "2026-10-24",
+ "generated_at": "2026-10-24T06:16:54Z",
  "packages_total": 7,
  "audit_ok": true,
- "findings": [],
+ "findings": [
+  {
+   "package": "fastmcp",
+   "spec": ">=4.0,<5",
+   "floor": "4.0",
+   "count": 2,
+   "severity": "MODERATE",
+   "rank": 60.0,
+   "clear_version": "4.1.2",
+   "advisories": [
+    {
+     "id": "GHSA-7xgj-8392-5q4r",
+     "aliases": [],
+     "summary": "FastMCP: Post-transform component authorization is skipped on direct calls"
+    },
+    {
+     "id": "GHSA-vqqp-x5qm-5qp4",
+     "aliases": [],
+     "summary": "FastMCP MCP client wrappers construct M2M OAuth providers without issuer binding — client secret redirectable to attacker-advertised authorization server"
+    }
+   ]
+  }
+ ],
  "unknown": [],
  "drift": [],
  "history": [
@@ -305,6 +327,18 @@
    "high": 0,
    "drift": 0,
    "finding_ids": [],
+   "audit_ok": true
+  },
+  {
+   "date": "2026-10-24",
+   "packages": 7,
+   "affected": 1,
+   "high": 0,
+   "drift": 0,
+   "finding_ids": [
+    "fastmcp::GHSA-7xgj-8392-5q4r",
+    "fastmcp::GHSA-vqqp-x5qm-5qp4"
+   ],
    "audit_ok": true
   }
  ],
