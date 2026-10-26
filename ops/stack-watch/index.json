@@ -2,8 +2,8 @@
  "repo": "HireAgent",
  "manifest": "pyproject.toml（含 1 组 extras）",
  "manifest_path": "pyproject.toml",
- "date": "2026-10-25",
- "generated_at": "2026-10-25T06:35:30Z",
+ "date": "2026-10-26",
+ "generated_at": "2026-10-26T06:45:58Z",
  "packages_total": 7,
  "audit_ok": true,
  "findings": [
@@ -343,6 +343,18 @@
   },
   {
    "date": "2026-10-25",
+   "packages": 7,
+   "affected": 1,
+   "high": 0,
+   "drift": 0,
+   "finding_ids": [
+    "fastmcp::GHSA-7xgj-8392-5q4r",
+    "fastmcp::GHSA-vqqp-x5qm-5qp4"
+   ],
+   "audit_ok": true
+  },
+  {
+   "date": "2026-10-26",
    "packages": 7,
    "affected": 1,
    "high": 0,
